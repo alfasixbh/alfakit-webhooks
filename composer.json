@@ -1,0 +1,86 @@
+{
+  "name": "alfasix/alfakit-webhooks",
+  "description": "Outgoing webhooks managed in an AlfaKit panel: endpoints with signed (HMAC-SHA256) queued deliveries, retries with exponential backoff, SSRF protection, auto-disable, a deliveries log with replay and tenant scoping.",
+  "keywords": [
+    "laravel",
+    "alfakit",
+    "webhooks",
+    "hmac",
+    "events",
+    "integrations"
+  ],
+  "homepage": "https://alfakit.dev/docs/plugins/webhooks",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alfa Six",
+      "homepage": "https://alfasixbh.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/alfasixbh/alfakit/issues",
+    "source": "https://github.com/alfasixbh/alfakit"
+  },
+  "require": {
+    "php": "^8.3",
+    "alfasix/alfakit": "^0.1|@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "AlfaSix\\AlfakitWebhooks\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AlfaSix\\AlfakitWebhooks\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "AlfaSix\\AlfakitWebhooks\\AlfakitWebhooksServiceProvider"
+      ]
+    },
+    "alfakit": {
+      "version": "^0.1",
+      "frontend": null,
+      "showcase": {
+        "demoPath": "webhooks",
+        "tour": [
+          "Open Settings > Webhooks",
+          "Create an endpoint and pick events",
+          "Inspect the deliveries log",
+          "Replay a delivery"
+        ],
+        "clips": [
+          "react-light",
+          "react-dark",
+          "vue-light",
+          "vue-dark",
+          "svelte-light",
+          "svelte-dark"
+        ],
+        "worksWith": [
+          "api",
+          "ops",
+          "workflows"
+        ],
+        "highlights": [
+          "HMAC-SHA256 signed, queued deliveries",
+          "Retries with exponential backoff",
+          "SSRF protection",
+          "Auto-disable on failures",
+          "Deliveries log with replay",
+          "Tenant scoping"
+        ]
+      }
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
