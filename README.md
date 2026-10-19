@@ -1,6 +1,8 @@
 # AlfaKit Webhooks
 
-<p><picture><source media="(prefers-color-scheme: dark)" srcset="../../../art/alfasix/alfa-six-micro-white.svg"><img src="../../../art/alfasix/alfa-six-micro-navy.svg" alt="" width="24" height="18" align="top"></picture> <sub>by <a href="https://alfasixbh.com">Alfa Six</a></sub></p>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/alfasixbh/alfakit/main/art/alfasix/alfa-six-micro-white.svg"><img src="https://raw.githubusercontent.com/alfasixbh/alfakit/main/art/alfasix/alfa-six-micro-navy.svg" alt="" width="24" height="18" align="top"></picture> <sub>by <a href="https://alfasixbh.com">Alfa Six</a></sub></p>
+
+> This is a read-only split of the [AlfaKit monorepo](https://github.com/alfasixbh/alfakit/tree/main/packages/plugins/webhooks). Please open issues and pull requests there.
 
 Outgoing webhooks managed in an [AlfaKit](https://alfakit.dev) panel. Your users add endpoints and pick the events they want; your code dispatches events; the plugin delivers them queued, signed with HMAC-SHA256, retried with exponential backoff, logged (redacted) with replay, and protected against SSRF. It renders in React, Vue and Svelte with AlfaKit's built-in components and has no dependencies beyond Laravel.
 
