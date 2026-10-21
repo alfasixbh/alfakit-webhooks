@@ -86,7 +86,8 @@ class WebhookManager
     {
         $event = trim($event);
 
-        if ($event === '' || $event === WebhookEndpoint::ALL_EVENTS) {
+        // `*` means "all events" and `ping` is the test event (`sendTest()`): both reserved.
+        if ($event === '' || $event === WebhookEndpoint::ALL_EVENTS || $event === WebhooksPlugin::PING_EVENT) {
             throw new InvalidArgumentException("[{$event}] is not a valid webhook event name.");
         }
 

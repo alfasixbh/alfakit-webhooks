@@ -112,6 +112,36 @@ it('flashes the new secret after creating and redirects to the edit page', funct
     expect(WebhookEndpoint::query()->sole()->events)->toBe([WebhookEndpoint::ALL_EVENTS]);
 });
 
+// The renderers' KeyValue field sends `[{key, value}]` rows, not a map.
+it('accepts custom headers in the row shape the renderers send', function (): void {
+    actingAs(user());
+
+    alfakit()->testPage(CreateWebhookEndpoint::class, panel: 'webhooks')
+        ->fillForm([
+            'url' => 'https://hooks.example.com/receive',
+            'subscription' => 'all',
+            'headers' => [['key' => 'Authorization', 'value' => 'Bearer abc'], ['key' => '', 'value' => '']],
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors();
+
+    expect(WebhookEndpoint::query()->sole()->headers)->toBe(['Authorization' => 'Bearer abc']);
+});
+
+it('validates custom headers sent as rows', function (array $rows): void {
+    actingAs(user());
+
+    alfakit()->testPage(CreateWebhookEndpoint::class, panel: 'webhooks')
+        ->fillForm(['url' => 'https://hooks.example.com/receive', 'subscription' => 'all', 'headers' => $rows])
+        ->call('create')
+        ->assertHasFormErrors(['headers']);
+
+    expect(WebhookEndpoint::query()->count())->toBe(0);
+})->with([
+    'reserved header row' => [[['key' => 'X-Webhook-Signature', 'value' => 'forged']]],
+    'line break in a value' => [[['key' => 'X-Token', 'value' => "a\r\nHost: evil"]]],
+]);
+
 it('validates the URL against the SSRF guard, the events and the headers', function (array $data, array $errors): void {
     actingAs(user());
 

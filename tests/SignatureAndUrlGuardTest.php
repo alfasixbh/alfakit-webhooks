@@ -146,3 +146,19 @@ it('redacts sensitive keys and headers and truncates bodies', function (): void 
         ->and($redactor->redactBody(str_repeat('a', 100)))->toBe(str_repeat('a', 40).'…')
         ->and($redactor->redactBody('{"secret":"s"}'))->toContain('[redacted]')->not->toContain('"s"');
 });
+
+// docs/content/plugins/webhooks.md § Verifying signatures: the PHP receiver must skip the CSRF
+// middleware of the installed Laravel's web group (PreventRequestForgery on Laravel 13), else
+// every delivery answers 419. Excluding a class removes the middlewares that are it or extend it.
+it('documents a receiver that skips the web group CSRF middleware of this Laravel version', function (): void {
+    $docs = (string) file_get_contents(dirname(__DIR__, 4).'/docs/content/plugins/webhooks.md');
+
+    expect(preg_match('/->withoutMiddleware\(\\\\([\w\\\\]+)::class\)/', $docs, $match))->toBe(1);
+
+    $excluded = $match[1];
+    $csrf = collect((new Illuminate\Foundation\Configuration\Middleware)->getMiddlewareGroups()['web'])
+        ->first(fn (string $class): bool => str_contains($class, 'Csrf') || str_contains($class, 'Forgery'));
+
+    expect(class_exists($excluded))->toBeTrue()
+        ->and($csrf === $excluded || is_subclass_of((string) $csrf, $excluded))->toBeTrue();
+});

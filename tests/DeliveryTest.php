@@ -75,6 +75,17 @@ it('sends a signed JSON POST to every subscribed endpoint', function (): void {
         ->and(WebhookDelivery::query()->where('endpoint_id', $all->id)->sole()->succeeded())->toBeTrue();
 });
 
+// docs: "`ping` and `*` are reserved" — `ping` is the test event of sendTest().
+it('refuses to dispatch the reserved ping and * event names', function (string $name): void {
+    Http::fake();
+    endpoint(['url' => 'https://example.com/all', 'events' => [WebhookEndpoint::ALL_EVENTS]]);
+
+    expect(fn () => Webhooks::dispatch($name, ['x' => 1]))->toThrow(InvalidArgumentException::class)
+        ->and(WebhookEvent::query()->count())->toBe(0);
+
+    Http::assertNothingSent();
+})->with(['ping', '*', ' ping ']);
+
 it('stores nothing when no endpoint subscribes', function (): void {
     Http::fake();
     endpoint(['events' => ['order.refunded']]);

@@ -31,6 +31,8 @@ class ValidWebhookHeaders implements ValidationRule
             return;
         }
 
+        $value = self::fromRows($value);
+
         if (count($value) > self::MAX_HEADERS) {
             $fail(__('alfakit-webhooks::webhooks.headers.too_many', ['max' => self::MAX_HEADERS]));
 
@@ -54,5 +56,30 @@ class ValidWebhookHeaders implements ValidationRule
                 return;
             }
         }
+    }
+
+    /**
+     * The renderers' KeyValue field sends its state as `[{key, value}]` rows (so keys can be
+     * typed freely); the field saves them as a `name => value` map without the empty keys.
+     * Validate that map, as it will be stored.
+     *
+     * @param  array<mixed>  $value
+     * @return array<mixed>
+     */
+    public static function fromRows(array $value): array
+    {
+        if ($value === [] || ! array_is_list($value) || ! is_array($value[0])) {
+            return $value;
+        }
+
+        $headers = [];
+
+        foreach ($value as $row) {
+            if (is_array($row) && is_scalar($row['key'] ?? null) && trim((string) $row['key']) !== '') {
+                $headers[(string) $row['key']] = $row['value'] ?? null;
+            }
+        }
+
+        return $headers;
     }
 }
