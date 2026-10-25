@@ -159,7 +159,8 @@ class DeliveriesRelationManager extends RelationManager
                     TextEntry::make('response_status')->label(__('alfakit-webhooks::webhooks.deliveries.fields.response_status'))->fontFamily('mono')->placeholder('—'),
                     TextEntry::make('attempt')->label(__('alfakit-webhooks::webhooks.deliveries.fields.attempt'))->formatStateUsing(static fn (mixed $state): string => '#'.(int) $state),
                     TextEntry::make('duration_ms')->label(__('alfakit-webhooks::webhooks.deliveries.fields.duration'))->numeric()->suffix(' ms')->placeholder('—'),
-                    TextEntry::make('event_id')->label(__('alfakit-webhooks::webhooks.deliveries.fields.event_id'))->fontFamily('mono')->copyable(),
+                    // A whole row: the id is one long word that would run into the next column.
+                    TextEntry::make('event_id')->label(__('alfakit-webhooks::webhooks.deliveries.fields.event_id'))->fontFamily('mono')->copyable()->columnSpanFull(),
                     TextEntry::make('sent_at')->label(__('alfakit-webhooks::webhooks.deliveries.fields.sent_at'))->dateTime()->placeholder('—'),
                     TextEntry::make('next_retry_at')->label(__('alfakit-webhooks::webhooks.deliveries.fields.next_retry_at'))->dateTime()->placeholder('—'),
                     TextEntry::make('url')->label(__('alfakit-webhooks::webhooks.fields.url'))->fontFamily('mono')->columnSpanFull(),

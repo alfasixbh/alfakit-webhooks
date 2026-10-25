@@ -397,3 +397,10 @@ it('fakes dispatching in application tests', function (): void {
     $fake->assertDispatchedTimes('order.paid');
     Http::assertNothingSent();
 });
+
+it('gives the event id a whole row in the delivery details', function (): void {
+    $grid = AlfaSix\AlfakitWebhooks\Resources\WebhookEndpointResource\RelationManagers\DeliveriesRelationManager::deliveryDetails()[0]->getChildComponents()[0];
+    $entry = collect($grid->getChildComponents())->first(fn ($component) => $component->getName() === 'event_id');
+
+    expect($entry->getColumnSpan())->toContain('full');
+});
