@@ -46,6 +46,8 @@ class EditWebhookEndpoint extends EditRecord
         // Hidden from serialisation (encrypted), so filled explicitly for the editor.
         if ($record instanceof WebhookEndpoint) {
             $data['headers'] = $record->headers ?? [];
+            // Not an attribute, so the radio would otherwise fall back to its default.
+            $data['subscription'] = $record->subscribesToAllEvents() ? 'all' : 'selected';
         }
 
         return $data;

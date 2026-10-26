@@ -184,6 +184,18 @@ it('accepts http URLs in the local environment or with allowInsecureUrls()', fun
     expect(WebhookEndpoint::query()->count())->toBe(1);
 });
 
+it('shows an endpoint that receives every event as such and saves it unchanged', function (): void {
+    actingAs(user());
+    $endpoint = endpoint(['events' => [WebhookEndpoint::ALL_EVENTS]]);
+
+    alfakit()->testPage(EditWebhookEndpoint::class, ['record' => $endpoint], panel: 'webhooks')
+        ->assertFormSet(['subscription' => 'all'])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($endpoint->refresh()->events)->toBe([WebhookEndpoint::ALL_EVENTS]);
+});
+
 it('edits an endpoint, keeps its headers and re-enables it after an automatic disable', function (): void {
     actingAs(user());
     $endpoint = endpoint(['headers' => ['X-Api-Key' => 'abc'], 'events' => ['order.paid']]);
