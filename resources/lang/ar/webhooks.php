@@ -6,7 +6,7 @@ return [
     'resource' => [
         'label' => 'نقطة استقبال webhook',
         'plural_label' => 'نقاط استقبال webhook',
-        'navigation_label' => 'Webhooks',
+        'navigation_label' => 'خطافات الويب',
     ],
 
     'sections' => [
